@@ -6,32 +6,50 @@ public class EightPuzzle
 {
     public static void main(String[] args)
     {
-        System.out.println("Hello World!");
 
-        int[] puzzle = {0,2,3,1,4,5,8,7,6};
-        int[] goalState = {1,2,3,8,0,4,7,6,5};
+       if(args.length == 2) {
 
-        Node root= new Node(puzzle,1);
-        UninformedSearch ui = new UninformedSearch(goalState);
+           String[] arg1 = args[0].split("");
+           String[] arg2 = args[1].split("");
 
-        //List<Node> solution = ui.BreadthFirstSearch(root);
+           if (arg2.length == 9 || arg1.length == 9) {
 
-        //List<Node> solution = ui.DepthFirstSearch(root);
+               int[] puzzle = new int[9];
+               int[] goalState = new int[9];
 
-        List<Node> solution = ui.AStar(root);
+               for(int x=0;x<9;x++){
+                   puzzle[x]=Integer.parseInt(arg1[x]);
+                   goalState[x]=Integer.parseInt(arg2[x]);
+               }
 
-        if(solution.size() > 0)
-        {
-            Collections.reverse(solution);
-            for(int i = 0; i < solution.size(); i++)
-            {
-                System.out.println(Arrays.toString(solution.get(i).puzzle));
-            }
-        }
-        else
-        {
-            System.out.println("No path to solution");
-        }
+               Node root = new Node(puzzle, 1);
+               UninformedSearch ui = new UninformedSearch(goalState);
+
+               //List<Node> solution = ui.BreadthFirstSearch(root);
+
+               //List<Node> solution = ui.DepthFirstSearch(root);
+
+               List<Node> solution = ui.AStar(root);
+
+               if (solution.size() > 0) {
+                   Collections.reverse(solution);
+                   for (int i = 0; i < solution.size(); i++) {
+                       System.out.println(Arrays.toString(solution.get(i).puzzle));
+                   }
+               } else {
+                   System.out.println("No path to solution");
+               }
+           }
+           else{
+               System.out.println("Command line arguments not formatted correctly");
+               System.out.println("Please use form java EightPuzzle 123456780 123456780");
+           }
+       }
+       else{
+           System.out.println("Incorrect number of command line arguments");
+       }
+
+
 
         
 
