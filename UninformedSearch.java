@@ -12,7 +12,7 @@ public class UninformedSearch
         this.goalState = goalState;
     }
 
-    public List<Node> BreadthFirstSearch(Node root,boolean verboseMode)
+    public List<Node> BreadthFirstSearch(Node root,boolean verboseMode, boolean allowRepeatedStates)
     {
         List<Node> PathToSolution = new ArrayList<>();
         List<Node> OpenList = new ArrayList<>();
@@ -26,10 +26,17 @@ public class UninformedSearch
         {
             Node currentNode = OpenList.get(0);
             currentDepthSearched = currentNode.depth;
-            ClosedList.add(currentNode);
+           if(!allowRepeatedStates)
+           {
+               ClosedList.add(currentNode);
+           }
+
             OpenList.remove(0);
 
-
+            if(verboseMode){
+                System.out.print("Expanding node...  ");
+                currentNode.PrintArray(currentNode.puzzle);
+            }
             currentNode.ExpandNode(currentNode.depth);
 
 
@@ -44,10 +51,19 @@ public class UninformedSearch
                     PathTrace(PathToSolution, currentChild);
                 }
 
-                if(!Contains(OpenList, currentChild) && !Contains(ClosedList, currentChild))
+                if(!allowRepeatedStates)
+                {
+                    if(!Contains(OpenList, currentChild) && !Contains(ClosedList, currentChild))
+                    {
+                        OpenList.add(currentChild);
+                    }
+                }
+                else
                 {
                     OpenList.add(currentChild);
                 }
+
+
 
             }
             //System.out.println();
@@ -55,7 +71,7 @@ public class UninformedSearch
         return PathToSolution;
     }
 
-    public List<Node> DepthFirstSearch(Node root,boolean verboseMode)
+    public List<Node> DepthFirstSearch(Node root,boolean verboseMode, boolean allowRepeatedStates)
     {
         List<Node> PathToSolution = new ArrayList<>();
         List<Node> OpenList = new ArrayList<>();
@@ -68,7 +84,10 @@ public class UninformedSearch
         while(OpenList.size() > 0 && !goalFound)
         {
             Node currentNode = OpenList.get(0);
-            ClosedList.add(currentNode);
+            if(!allowRepeatedStates)
+            {
+                ClosedList.add(currentNode);
+            }
             OpenList.remove(0);
 
             if(currentNode.parent != null)
@@ -78,6 +97,10 @@ public class UninformedSearch
 
             if(currentNode.depth <= 10)
             {
+                if(verboseMode){
+                    System.out.print("Expanding node...  ");
+                    currentNode.PrintArray(currentNode.puzzle);
+                }
                 currentNode.ExpandNode(currentNode.depth);
             }
 
@@ -91,9 +114,16 @@ public class UninformedSearch
                     PathTrace(PathToSolution, currentChild);
                 }
 
-                if(!Contains(OpenList, currentChild) && !Contains(ClosedList, currentChild))
+                if(!allowRepeatedStates)
                 {
-                    OpenList.add(0,currentChild);
+                    if(!Contains(OpenList, currentChild) && !Contains(ClosedList, currentChild))
+                    {
+                        OpenList.add(currentChild);
+                    }
+                }
+                else
+                {
+                    OpenList.add(currentChild);
                 }
 
             }

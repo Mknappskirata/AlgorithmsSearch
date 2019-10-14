@@ -38,9 +38,13 @@ public class EightPuzzle
                 Node root = new Node(puzzle, 1,"Root");
                 UninformedSearch ui = new UninformedSearch(goalState);
 
-                List<Node> solution = ui.BreadthFirstSearch(root,verboseMode);
+                //List<Node> solution = ui.BreadthFirstSearch(root,verboseMode,true);
 
-                //List<Node> solution = ui.DepthFirstSearch(root,verboseMode);
+                //List<Node> solution = ui.BreadthFirstSearch(root,verboseMode,false);
+
+                //List<Node> solution = ui.DepthFirstSearch(root,verboseMode,true);
+
+                List<Node> solution = ui.DepthFirstSearch(root,verboseMode,false);
 
                 //List<Node> solution = ui.AStar(root,verboseMode);
 
