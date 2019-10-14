@@ -22,7 +22,7 @@ public class EightPuzzle
                    goalState[x]=Integer.parseInt(arg2[x]);
                }
 
-               Node root = new Node(puzzle, 1);
+               Node root = new Node(puzzle, 1, "Root");
                UninformedSearch ui = new UninformedSearch(goalState);
 
                //List<Node> solution = ui.BreadthFirstSearch(root);
@@ -34,6 +34,7 @@ public class EightPuzzle
                if (solution.size() > 0) {
                    Collections.reverse(solution);
                    for (int i = 0; i < solution.size(); i++) {
+                       System.out.println("Move: " + solution.get(i).getMove());
                        System.out.println(Arrays.toString(solution.get(i).puzzle));
                    }
                } else {
