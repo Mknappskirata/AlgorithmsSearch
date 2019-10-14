@@ -7,7 +7,14 @@ public class EightPuzzle
     public static void main(String[] args)
     {
 
-        if(args.length == 3) {
+        if(args.length == 2 || args.length==3) {
+
+
+             boolean verboseMode=false;
+             if(args.length==3 && args[2].equals("-v"))
+             {
+                 verboseMode=true;
+             }
 
             String[] arg1 = args[0].split("");
             String[] arg2 = args[1].split("");
@@ -31,16 +38,20 @@ public class EightPuzzle
                 Node root = new Node(puzzle, 1,"Root");
                 UninformedSearch ui = new UninformedSearch(goalState);
 
-                List<Node> solution = ui.BreadthFirstSearch(root);
+                List<Node> solution = ui.BreadthFirstSearch(root,verboseMode);
 
-                //List<Node> solution = ui.DepthFirstSearch(root);
+                //List<Node> solution = ui.DepthFirstSearch(root,verboseMode);
 
-                //List<Node> solution = ui.AStar(root);
+                //List<Node> solution = ui.AStar(root,verboseMode);
 
                 if (solution.size() > 0) {
                     Collections.reverse(solution);
                     for (int i = 0; i < solution.size(); i++) {
-                        System.out.println(Arrays.toString(solution.get(i).puzzle));
+                        System.out.println("Move: " + solution.get(i).getMove());
+                        if(verboseMode){
+                            System.out.println(Arrays.toString(solution.get(i).puzzle));
+                        }
+
                     }
                 } else {
                     System.out.println("Solution not able to be found");

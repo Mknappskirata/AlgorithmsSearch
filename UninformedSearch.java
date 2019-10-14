@@ -12,7 +12,7 @@ public class UninformedSearch
         this.goalState = goalState;
     }
 
-    public List<Node> BreadthFirstSearch(Node root)
+    public List<Node> BreadthFirstSearch(Node root,boolean verboseMode)
     {
         List<Node> PathToSolution = new ArrayList<>();
         List<Node> OpenList = new ArrayList<>();
@@ -55,7 +55,7 @@ public class UninformedSearch
         return PathToSolution;
     }
 
-    public List<Node> DepthFirstSearch(Node root)
+    public List<Node> DepthFirstSearch(Node root,boolean verboseMode)
     {
         List<Node> PathToSolution = new ArrayList<>();
         List<Node> OpenList = new ArrayList<>();
@@ -102,7 +102,7 @@ public class UninformedSearch
         return PathToSolution;
     }
 
-    public List<Node> AStar(Node root)
+    public List<Node> AStar(Node root, boolean verboseMode)
     {
         List<Node> PathToSolution = new ArrayList<>();
         NodePriorityComparator nodePriorityComparator = new NodePriorityComparator();
@@ -119,9 +119,11 @@ public class UninformedSearch
             currentNode.SetTotalCost(currentNode.FindTotalCost(goalState));
             ClosedList.add(currentNode);
             nodePriorityQueue.remove(currentNode);
+            if(verboseMode){
+                System.out.print("Expanding node...  ");
+                currentNode.PrintArray(currentNode.puzzle);
+            }
 
-            System.out.print("Expanding node...  ");
-            currentNode.PrintArray(currentNode.puzzle);
             currentNode.ExpandNode(currentNode.depth);
 
             for(int i = 0; i <currentNode.children.size(); i++)
