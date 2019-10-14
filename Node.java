@@ -11,12 +11,25 @@ public class Node
     public int x = 0;
     public int col = 3;
     private int totalCost;
+    private String move;
 
-    public Node(int[] p, int depth)
+    public void setMove(String move) {
+        this.move = move;
+    }
+
+    public String getMove() {
+        return move;
+    }
+
+
+
+    public Node(int[] p, int depth, String move)
     {
         puzzle = p;
         this.depth = depth;
+        this.move = move;
     }
+
 
     public int GetTotalCost() {
         return totalCost;
@@ -57,7 +70,7 @@ public class Node
 
     public void MoveUp(int[] p, int i, int depth)
     {
-        if(i-col > 0)
+        if(i-col >= 0)
         {
             int[] pc = new int[9];
             CopyPuzzle(pc, p);
@@ -66,7 +79,7 @@ public class Node
             pc[i-3] = pc[i];
             pc[i] = temp;
 
-            Node child = new Node(pc,depth+1);
+            Node child = new Node(pc,depth+1, "Up");
             children.add(child);
             child.parent = this;
         }
@@ -83,7 +96,7 @@ public class Node
             pc[i+1] = pc[i];
             pc[i] = temp;
 
-            Node child = new Node(pc,depth+1);
+            Node child = new Node(pc,depth+1, "Right");
             children.add(child);
             child.parent = this;
 
@@ -101,7 +114,7 @@ public class Node
             pc[i+3] = pc[i];
             pc[i] = temp;
 
-            Node child = new Node(pc,depth+1);
+            Node child = new Node(pc,depth+1, "Down");
             children.add(child);
             child.parent = this;
         }
@@ -118,7 +131,7 @@ public class Node
             pc[i-1] = pc[i];
             pc[i] = temp;
 
-            Node child = new Node(pc,depth+1);
+            Node child = new Node(pc,depth+1, "Left");
             children.add(child);
             child.parent = this;
 
@@ -157,7 +170,7 @@ public class Node
         int cost = 0;
         for(int x =0; x < puzzle.length; x++)
         {
-            if(puzzle[x] != goalState[x])
+            if(this.puzzle[x] != goalState[x] && this.puzzle[x] != 0)
             {
                 cost++;
             }

@@ -14,44 +14,45 @@ public class UninformedSearch
 
     public List<Node> BreadthFirstSearch(Node root)
     {
-         List<Node> PathToSolution = new ArrayList<>();
-         List<Node> OpenList = new ArrayList<>();
-         List<Node> ClosedList = new ArrayList<>();
-         int currentDepthSearched = 0;
+        List<Node> PathToSolution = new ArrayList<>();
+        List<Node> OpenList = new ArrayList<>();
+        List<Node> ClosedList = new ArrayList<>();
+        int currentDepthSearched = 0;
 
-         OpenList.add(root);
-         boolean goalFound = false;
+        OpenList.add(root);
+        boolean goalFound = false;
 
-         while(OpenList.size() > 0 && !goalFound && currentDepthSearched <= 10)
-         {
-             Node currentNode = OpenList.get(0);
-             currentDepthSearched = currentNode.depth;
-             ClosedList.add(currentNode);
-             OpenList.remove(0);
-
-             currentNode.ExpandNode(currentNode.depth);
+        while(OpenList.size() > 0 && !goalFound && currentDepthSearched <= 10)
+        {
+            Node currentNode = OpenList.get(0);
+            currentDepthSearched = currentNode.depth;
+            ClosedList.add(currentNode);
+            OpenList.remove(0);
 
 
+            currentNode.ExpandNode(currentNode.depth);
 
-             for(int i = 0; i <currentNode.children.size(); i++)
-             {
-                 Node currentChild = currentNode.children.get(i);
-                 if(currentChild.GoalTest(goalState))
-                 {
-                     System.out.println("Goal state found!");
-                     goalFound = true;
-                     PathTrace(PathToSolution, currentChild);
-                 }
 
-                 if(!Contains(OpenList, currentChild) && !Contains(ClosedList, currentChild))
-                 {
-                     OpenList.add(currentChild);
-                 }
 
-             }
-             //System.out.println();
-         }
-         return PathToSolution;
+            for(int i = 0; i <currentNode.children.size(); i++)
+            {
+                Node currentChild = currentNode.children.get(i);
+                if(currentChild.GoalTest(goalState))
+                {
+                    System.out.println("Goal state found!");
+                    goalFound = true;
+                    PathTrace(PathToSolution, currentChild);
+                }
+
+                if(!Contains(OpenList, currentChild) && !Contains(ClosedList, currentChild))
+                {
+                    OpenList.add(currentChild);
+                }
+
+            }
+            //System.out.println();
+        }
+        return PathToSolution;
     }
 
     public List<Node> DepthFirstSearch(Node root)
@@ -115,14 +116,18 @@ public class UninformedSearch
         while(nodePriorityQueue.size() > 0 && !goalFound)
         {
             Node currentNode = nodePriorityQueue.poll();
+            currentNode.SetTotalCost(currentNode.FindTotalCost(goalState));
             ClosedList.add(currentNode);
             nodePriorityQueue.remove(currentNode);
 
+            System.out.print("Expanding node...  ");
+            currentNode.PrintArray(currentNode.puzzle);
             currentNode.ExpandNode(currentNode.depth);
 
             for(int i = 0; i <currentNode.children.size(); i++)
             {
                 Node currentChild = currentNode.children.get(i);
+                currentChild.SetTotalCost(currentChild.FindTotalCost(goalState));
                 if(currentChild.GoalTest(goalState))
                 {
                     System.out.println("Goal state found!");
@@ -130,7 +135,7 @@ public class UninformedSearch
                     PathTrace(PathToSolution, currentChild);
                 }
 
-               // List<Node> asList = Arrays.asList(nodePriorityQueue.toArray(new Node[nodePriorityQueue.size() + 1]));
+                // List<Node> asList = Arrays.asList(nodePriorityQueue.toArray(new Node[nodePriorityQueue.size() + 1]));
                 List<Node> arr = Arrays.asList(nodePriorityQueue.toArray(new Node[nodePriorityQueue.size()]));
                 if(!Contains(ClosedList, currentChild))
                 {
