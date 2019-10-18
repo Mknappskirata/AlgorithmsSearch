@@ -10,11 +10,11 @@ public class EightPuzzle
         if(args.length == 2 || args.length==3) {
 
 
-             boolean verboseMode=false;
-             if(args.length==3 && args[2].equals("-v"))
-             {
-                 verboseMode=true;
-             }
+            boolean verboseMode=false;
+            if(args.length==3 && args[2].equals("-v"))
+            {
+                verboseMode=true;
+            }
 
             String[] arg1 = args[0].split("");
             String[] arg2 = args[1].split("");
@@ -35,31 +35,36 @@ public class EightPuzzle
                 }
 
 
-                Node root = new Node(puzzle, 1,"Root");
+
                 UninformedSearch ui = new UninformedSearch(goalState);
 
-                //List<Node> solution = ui.BreadthFirstSearch(root,verboseMode,true);
+                Node root1 = new Node(puzzle, 1,"");
+                List<Node> solution1 = ui.BreadthFirstSearch(root1,verboseMode,true);
+                System.out.println("Breadth First Search with Repeated States...");
+                printSearchResults(solution1, ui,verboseMode);
 
-                //List<Node> solution = ui.BreadthFirstSearch(root,verboseMode,false);
+                Node root2 = new Node(puzzle, 1,"");
+                List<Node> solution2 = ui.BreadthFirstSearch(root2,verboseMode,false);
+                System.out.println("Breadth First Search without Repeated States...");
+                printSearchResults(solution2, ui,verboseMode);
 
-                //List<Node> solution = ui.DepthFirstSearch(root,verboseMode,true);
+                Node root3 = new Node(puzzle, 1,"");
+                List<Node> solution3 = ui.DepthFirstSearch(root3,verboseMode,true);
+                System.out.println("Depth First Search with Repeated States...");
+                printSearchResults(solution3, ui,verboseMode);
 
-                List<Node> solution = ui.DepthFirstSearch(root,verboseMode,false);
+                Node root4 = new Node(puzzle, 1,"");
+                List<Node> solution4 = ui.DepthFirstSearch(root4,verboseMode,false);
+                System.out.println("Depth First Search without Repeated States...");
+                printSearchResults(solution4, ui,verboseMode);
 
-                //List<Node> solution = ui.AStar(root,verboseMode);
 
-                if (solution.size() > 0) {
-                    Collections.reverse(solution);
-                    for (int i = 0; i < solution.size(); i++) {
-                        System.out.println("Move: " + solution.get(i).getMove());
-                        if(verboseMode){
-                            System.out.println(Arrays.toString(solution.get(i).puzzle));
-                        }
+                Node root5 = new Node(puzzle, 1,"");
+                List<Node> solution5 = ui.AStar(root5,verboseMode);
+                System.out.println("A* Search...");
+                printSearchResults(solution5, ui,verboseMode);
 
-                    }
-                } else {
-                    System.out.println("Solution not able to be found");
-                }
+
             }
             else{
                 System.out.println("Command line arguments not formatted correctly");
@@ -76,6 +81,28 @@ public class EightPuzzle
 
     }
 
+    public static void printSearchResults(List<Node> solution, UninformedSearch ui, boolean verboseMode)
+    {
+        if (solution.size() > 0)
+        {
+            Collections.reverse(solution);
+            System.out.print("Moves: ");
+            for (int i = 0; i < solution.size(); i++) {
+                System.out.print(solution.get(i).getMove());
+                if(verboseMode){
+                    System.out.println(Arrays.toString(solution.get(i).puzzle));
+                }
+
+            }
+            System.out.println("\nNumber of Nodes Expanded: " + ui.getNodesExpanded());
+            System.out.println("Number of Nodes Stored: " + ui.getNodesStored());
+            System.out.println();
+        }
+        else
+        {
+            System.out.println("Solution not able to be found");
+        }
+    }
     public static boolean solutionPossible(int[] puzzle, int[] goal)
     {
         int count = 0;

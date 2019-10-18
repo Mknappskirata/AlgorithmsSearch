@@ -79,7 +79,7 @@ public class Node
             pc[i-3] = pc[i];
             pc[i] = temp;
 
-            Node child = new Node(pc,depth+1, "Up");
+            Node child = new Node(pc,depth+1, "U");
             children.add(child);
             child.parent = this;
         }
@@ -96,7 +96,7 @@ public class Node
             pc[i+1] = pc[i];
             pc[i] = temp;
 
-            Node child = new Node(pc,depth+1, "Right");
+            Node child = new Node(pc,depth+1, "R");
             children.add(child);
             child.parent = this;
 
@@ -114,7 +114,7 @@ public class Node
             pc[i+3] = pc[i];
             pc[i] = temp;
 
-            Node child = new Node(pc,depth+1, "Down");
+            Node child = new Node(pc,depth+1, "D");
             children.add(child);
             child.parent = this;
         }
@@ -131,7 +131,7 @@ public class Node
             pc[i-1] = pc[i];
             pc[i] = temp;
 
-            Node child = new Node(pc,depth+1, "Left");
+            Node child = new Node(pc,depth+1, "L");
             children.add(child);
             child.parent = this;
 
@@ -148,7 +148,9 @@ public class Node
 
     public void PrintArray(int[] p)
     {
-        System.out.println(Arrays.toString(p));
+        System.out.println("{" + p[0] + " " + p[1] + " " + p[2]);
+        System.out.println("{" + p[3] + " " + p[4] + " " + p[5]);
+        System.out.println("{" + p[6] + " " + p[7] + " " + p[8] + "}");
     }
 
 

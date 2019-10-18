@@ -6,6 +6,18 @@ import java.util.PriorityQueue;
 public class UninformedSearch
 {
     public int[] goalState;
+    private int nodesExpanded = 0;
+    private int nodesStored = 0;
+
+    public int getNodesExpanded()
+    {
+        return this.nodesExpanded;
+    }
+
+    public int getNodesStored()
+    {
+        return this.nodesStored;
+    }
 
     public UninformedSearch(int[] goalState)
     {
@@ -18,6 +30,8 @@ public class UninformedSearch
         List<Node> OpenList = new ArrayList<>();
         List<Node> ClosedList = new ArrayList<>();
         int currentDepthSearched = 0;
+        nodesExpanded = 0;
+        nodesStored = 0;
 
         OpenList.add(root);
         boolean goalFound = false;
@@ -26,10 +40,10 @@ public class UninformedSearch
         {
             Node currentNode = OpenList.get(0);
             currentDepthSearched = currentNode.depth;
-           if(!allowRepeatedStates)
-           {
-               ClosedList.add(currentNode);
-           }
+            if(!allowRepeatedStates)
+            {
+                ClosedList.add(currentNode);
+            }
 
             OpenList.remove(0);
 
@@ -38,6 +52,8 @@ public class UninformedSearch
                 currentNode.PrintArray(currentNode.puzzle);
             }
             currentNode.ExpandNode(currentNode.depth);
+            nodesExpanded++;
+
 
 
 
@@ -68,6 +84,15 @@ public class UninformedSearch
             }
             //System.out.println();
         }
+        if(!allowRepeatedStates)
+        {
+            this.nodesStored = OpenList.size() + ClosedList.size();
+        }
+        else
+        {
+            this.nodesStored = OpenList.size() + nodesExpanded;
+        }
+
         return PathToSolution;
     }
 
@@ -76,6 +101,8 @@ public class UninformedSearch
         List<Node> PathToSolution = new ArrayList<>();
         List<Node> OpenList = new ArrayList<>();
         List<Node> ClosedList = new ArrayList<>();
+        nodesExpanded = 0;
+        nodesStored = 0;
 
         OpenList.add(root);
         root.depth = 0;
@@ -95,13 +122,14 @@ public class UninformedSearch
                 currentNode.depth = currentNode.parent.depth + 1;
             }
 
-            if(currentNode.depth <= 10)
+            if(currentNode.depth < 10)
             {
                 if(verboseMode){
                     System.out.print("Expanding node...  ");
                     currentNode.PrintArray(currentNode.puzzle);
                 }
                 currentNode.ExpandNode(currentNode.depth);
+                nodesExpanded++;
             }
 
             for(int i = 0; i <currentNode.children.size(); i++)
@@ -129,6 +157,7 @@ public class UninformedSearch
             }
             //System.out.println();
         }
+        this.nodesStored = OpenList.size() + 10;
         return PathToSolution;
     }
 
@@ -138,6 +167,8 @@ public class UninformedSearch
         NodePriorityComparator nodePriorityComparator = new NodePriorityComparator();
         PriorityQueue<Node> nodePriorityQueue = new PriorityQueue<Node>(10, nodePriorityComparator);
         List<Node> ClosedList = new ArrayList<>();
+        nodesExpanded = 0;
+        nodesStored = 0;
 
         nodePriorityQueue.add(root);
         root.SetTotalCost(root.FindTotalCost(goalState));
@@ -155,6 +186,7 @@ public class UninformedSearch
             }
 
             currentNode.ExpandNode(currentNode.depth);
+            nodesExpanded++;
 
             for(int i = 0; i <currentNode.children.size(); i++)
             {
@@ -177,7 +209,7 @@ public class UninformedSearch
             }
 
         }
-
+        this.nodesStored = nodePriorityQueue.size() + ClosedList.size();
         return PathToSolution;
     }
 
