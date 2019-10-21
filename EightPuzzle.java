@@ -1,13 +1,17 @@
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
+/**
+ * @author John and Matthew Knapp
+ * Eightpuzzle is our main class. This handles all the command line arguments coming in. Our command line arguments
+ * allow the user to specify a initial state of the puzzle and a goal state of the puzzle.
+ */
 public class EightPuzzle
 {
     public static void main(String[] args)
     {
 
-        if(args.length == 2 || args.length==3) {
+        if(args.length == 2 || args.length==3 || args[0].length()!=9 || args[1].length()!=9) {
 
 
             boolean verboseMode=false;
@@ -19,7 +23,7 @@ public class EightPuzzle
             String[] arg1 = args[0].split("");
             String[] arg2 = args[1].split("");
 
-            if (arg2.length == 9 || arg1.length == 9) {
+            if (arg2.length == 9 && arg1.length == 9) {
 
                 int[] puzzle = new int[9];
                 int[] goalState = new int[9];
@@ -36,7 +40,7 @@ public class EightPuzzle
 
 
 
-                UninformedSearch ui = new UninformedSearch(goalState);
+                Search ui = new Search(goalState);
 
                 Node root1 = new Node(puzzle, 1,"");
                 List<Node> solution1 = ui.BreadthFirstSearch(root1,verboseMode,true);
@@ -68,11 +72,11 @@ public class EightPuzzle
             }
             else{
                 System.out.println("Command line arguments not formatted correctly");
-                System.out.println("Please use form java EightPuzzle 123456780 123456780 V/N");
+                System.out.println("Please use form java EightPuzzle 123456780 123456780 -v");
             }
         }
         else{
-            System.out.println("Incorrect number of command line arguments");
+            System.out.println("Incorrect command line arguments");
         }
 
 
@@ -81,7 +85,14 @@ public class EightPuzzle
 
     }
 
-    public static void printSearchResults(List<Node> solution, UninformedSearch ui, boolean verboseMode)
+    /**
+     * This method is used to reverse to order of the list as it lists the order of the solution from leaf to root. It also
+     * formats the printing of the solution
+     * @param solution This is the List of Nodes leading from the leaf to the root Node that traces a path to the solution
+     * @param ui this is the Search Object that was used to perform the search. Used to print information about the search performance
+     * @param verboseMode Used to tell if the method to print something only if verbose mode toggled when running
+     */
+    public static void printSearchResults(List<Node> solution, Search ui, boolean verboseMode)
     {
         if (solution.size() > 0)
         {
@@ -90,7 +101,7 @@ public class EightPuzzle
             for (int i = 0; i < solution.size(); i++) {
                 System.out.print(solution.get(i).getMove());
                 if(verboseMode){
-                    System.out.println(Arrays.toString(solution.get(i).puzzle));
+                    System.out.println(Arrays.toString(solution.get(i).currentPuzzle));
                 }
 
             }
@@ -103,6 +114,16 @@ public class EightPuzzle
             System.out.println("Solution not able to be found");
         }
     }
+
+    /**
+     * takes in the initial state of the puzzle and determines if the puzzle is solvable. This method does this
+     * by counting the number of inversions in the initial state. Inversions count the number of times a number is
+     * behind or ahead of where it is supposed to be in the goal state. If the number of inversions is even,
+     * the puzzle is solvable, whereas if the number of inversions in odd, the puzzle is unsolvable.
+     * @param puzzle contains the initial state of the puzzle
+     * @param goal contains the desired goal of the puzzle
+     * @return returns true if the puzzle is solvable and returns false if it is not solvable
+     */
     public static boolean solutionPossible(int[] puzzle, int[] goal)
     {
         int count = 0;
